@@ -1,0 +1,26 @@
+.wrapper {
+    display:flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #49505700 ;
+    background-color: #212529;
+    height: 95px;
+}
+
+.wrapper > img {
+    padding: 20px;
+}
+
+.connectButton {
+    font-family: arcade;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    padding: 10px 50px;
+    color:#ffffff;
+    background-color: #0b5ed7;
+}
+
+.connectButton:hover {
+    background-color: #074aaf;
+    cursor: pointer;
+}
