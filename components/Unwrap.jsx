@@ -36,8 +36,8 @@ export default function Unwrap (){
         try{
             const provider = new ethers.providers.Web3Provider(walletProvider)
             const signer = provider.getSigner()
-            const chest = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
-            const response = parseInt(await chest.balanceOf(address))
+            const wrawr = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
+            const response = parseInt(await wrawr.balanceOf(address))
             setBalance(parseFloat(response/10**18))
         } catch (e) {
             console.log(e)
@@ -49,8 +49,8 @@ export default function Unwrap (){
             if (!walletProvider) return;
             const provider = new ethers.providers.Web3Provider(walletProvider)
             const signer = provider.getSigner()
-            const chest = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
-            const response = parseFloat(await chest.allowance(address,contracts.wrawr))/10**18
+            const wrawr = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
+            const response = parseFloat(await wrawr.allowance(address,contracts.wrawr))/10**18
             console.log(response)
             response >= parseFloat(input) ? setButton("Unwrap") : setButton("Approve")
         } catch (e) {

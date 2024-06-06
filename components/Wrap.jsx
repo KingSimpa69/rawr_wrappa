@@ -36,8 +36,8 @@ export default function Wrap (){
         try{
             const provider = new ethers.providers.Web3Provider(walletProvider)
             const signer = provider.getSigner()
-            const chest = new ethers.Contract(contracts.rawr, ABI.rawr, signer)
-            const response = parseInt(await chest.balanceOf(address))
+            const rawr = new ethers.Contract(contracts.rawr, ABI.rawr, signer)
+            const response = parseInt(await rawr.balanceOf(address))
             setBalance(parseFloat(response/10**18))
         } catch (e) {
             console.log(e)
@@ -49,8 +49,8 @@ export default function Wrap (){
             if (!walletProvider) return;
             const provider = new ethers.providers.Web3Provider(walletProvider)
             const signer = provider.getSigner()
-            const chest = new ethers.Contract(contracts.rawr, ABI.rawr, signer)
-            const response = parseFloat(await chest.allowance(address,contracts.wrawr))/10**18
+            const rawr = new ethers.Contract(contracts.rawr, ABI.rawr, signer)
+            const response = parseFloat(await rawr.allowance(address,contracts.wrawr))/10**18
             console.log(response)
             response >= parseFloat(input) ? setButton("Wrap") : setButton("Approve")
         } catch (e) {
