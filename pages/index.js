@@ -24,6 +24,7 @@ export default function Home() {
           isConnected && mode === "unwrap" ? <Unwrap /> : null
         }
       </div>
+      <div className={styles.disclaimer}>! This WRAWR is an unofficial test token !</div>
     </div>
   )
 }

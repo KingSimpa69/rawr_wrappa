@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }) {
         <Head>
             <title>RAWR Wrappa</title>
             <meta name="description" content="RAWR Wrappa - RAWR wrapping dapp" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             <link rel="icon" href="/favicon.ico" />
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
             <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
