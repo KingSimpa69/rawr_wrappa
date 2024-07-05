@@ -1,5 +1,5 @@
 const LoadinSpinner = () => {
-    return<div class="loader"></div>
+    return<div className="loader"></div>
 } 
 
 export default LoadinSpinner

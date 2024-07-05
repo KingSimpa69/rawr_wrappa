@@ -4,7 +4,7 @@ import Image from "next/image"
 import { useWeb3ModalProvider,useWeb3ModalAccount } from "@web3modal/ethers5/react"
 import ABI from "@/functions/ABI.json"
 import { isAddress } from "ethers/lib/utils"
-import { ethers } from "ethers"
+import { ethers, utils } from "ethers"
 import formatETH from "@/functions/formatEth"
 import useDebounce from "@/hooks/useDebounce"
 import contracts from "@/contracts/deployments.json"
@@ -50,8 +50,8 @@ export default function Unwrap (){
             const provider = new ethers.providers.Web3Provider(walletProvider)
             const signer = provider.getSigner()
             const wrawr = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
-            const response = parseFloat(await wrawr.allowance(address,contracts.wrawr))/10**18
-            console.log(response)
+            const response = parseFloat(await wrawr.allowance(address,contracts.RAWRSwapper))/10**18
+            //console.log(response)
             response >= parseFloat(input) ? setButton("Unwrap") : setButton("Approve")
         } catch (e) {
             console.log(e)
@@ -65,7 +65,7 @@ export default function Unwrap (){
             const provider = new ethers.providers.Web3Provider(walletProvider)
             const signer = provider.getSigner()
             const rawr = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
-            const response = await rawr.approve(contracts.wrawr,(input*10**18).toString())
+            const response = await rawr.approve(contracts.RAWRSwapper,(parseInt(input*10**18)).toString())
             await response.wait()
             checkIfApproved()
         } catch (e) {
@@ -75,21 +75,32 @@ export default function Unwrap (){
     }
 
     const unwrap = async () => {
-        setButton("Loading")
-        try{
+        setButton("Loading");
+        try {
             if (!walletProvider) return;
-            const provider = new ethers.providers.Web3Provider(walletProvider)
-            const signer = provider.getSigner()
-            const wrawr = new ethers.Contract(contracts.wrawr, ABI.wrawr, signer)
-            const response = await wrawr.unwrap((input*10**18).toString())
-            await response.wait()
-            setInput(0)
-            getBalance()
+            const provider = new ethers.providers.Web3Provider(walletProvider);
+            const signer = provider.getSigner();
+            const RAWRSwapper = new ethers.Contract(contracts.RAWRSwapper, ABI.RAWRSwapper, signer);
+
+            const parsedInput = parseFloat(input);
+            if (isNaN(parsedInput) || parsedInput <= 0) {
+                throw new Error("Invalid input amount");
+            }
+    
+            const inputBN = utils.parseUnits(input.toString(), 18);
+            const gasPrice = await provider.getGasPrice();
+            const gasLimit = await RAWRSwapper.estimateGas.unwrapRAWR(inputBN.toString());
+            const response = await RAWRSwapper.unwrapRAWR(inputBN.toString(), { gasPrice: gasPrice, gasLimit: gasLimit });
+            await response.wait();
+    
+            setInput(0);
+            getBalance();
         } catch (e) {
-            setButton("Unwrap")
-            console.log(e)
+            setButton("Unwrap");
+            console.log(e);
         }
-    }
+    };
+    
 
     const theBigButton = async () => {
         button === "Approve" ? approveAmount() : 
@@ -121,7 +132,7 @@ export default function Unwrap (){
             <div onClick={()=>setInput(parseFloat(formatETH(balance?.toString())))} className={styles.balance}>Balance: {balance !== null ? formatETH(balance.toString()) : 0}</div>
             <div className={styles.downArrow} ><Image alt={"down-arrow"} src={"/images/down-arrow-svgrepo-com.svg"} width={50} height={50}/></div>
             <div className={styles.inputBox}>
-                <input readOnly value={isNaN(output) ? 0 : (output).toLocaleString()}/>
+                <input readOnly value={isNaN(output) ? 0 : output}/>
                 <div className={styles.tokenTicker}>RAWR</div>
             </div>
             {button !== "" && 

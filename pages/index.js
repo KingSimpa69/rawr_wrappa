@@ -12,7 +12,6 @@ export default function Home() {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.disclaimer}>! This WRAWR is an unofficial test token !</div>
       <div className={styles.container}>
         <div className={styles.modeToggleWrapper}>
           <div onClick={()=>modeToggle("wrap")} className={`${styles.modeToggle} ${mode === "wrap" ? styles.active : null}`}>Wrap</div>
@@ -24,7 +23,6 @@ export default function Home() {
           isConnected && mode === "unwrap" ? <Unwrap /> : null
         }
       </div>
-      <div className={styles.disclaimer}>! This WRAWR is an unofficial test token !</div>
     </div>
   )
 }
